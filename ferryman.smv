@@ -1,0 +1,45 @@
+MODULE main
+
+VAR 
+	ferryman                                    : boolean;
+    goat                                        : boolean;
+	cabbage                                     : boolean; 
+    wolf                                        : boolean;
+	carry                                       : {g, c, w, none};
+
+ASSIGN
+	init (ferryman) := FALSE; init (goat) := FALSE;
+	init (cabbage)  := FALSE; init (wolf) := FALSE;
+	init (carry)    := none;
+
+	next (ferryman) := !ferryman;
+
+    next (carry) := case
+                            ferryman = goat     : g;
+                            TRUE 	            : none; 
+                      esac union 
+                      case
+                            ferryman = cabbage  : c;
+                            TRUE 	            : none; 
+                      esac union 
+                      case
+                            ferryman = wolf     : w;
+                            TRUE 	            : none; 
+                      esac union none;
+
+	next (goat) := case
+		ferryman = goat & next (carry) = g      : next (ferryman);
+		TRUE 	                                : goat; 
+	esac;
+
+	next (cabbage) := case
+		ferryman = cabbage & next (carry) = c   : next (ferryman);
+		TRUE 	                                : cabbage; 
+	esac;
+
+	next (wolf) := case
+		ferryman = wolf & next (carry) = w      : next (ferryman);
+		TRUE                                    : wolf; 
+	esac;
+
+LTLSPEC !(((goat = cabbage | goat = wolf) -> goat = ferryman) U (cabbage & goat & wolf & ferryman))
