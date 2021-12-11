@@ -1,11 +1,9 @@
 MODULE main
 
 VAR 
-	ferryman                                    : boolean;
-    goat                                        : boolean;
-	cabbage                                     : boolean; 
-    wolf                                        : boolean;
-	carry                                       : {g, c, w, none};
+	ferryman : boolean; goat : boolean;
+	cabbage : boolean; wolf : boolean;
+	carry : {g, c, w, none};
 
 ASSIGN
 	init (ferryman) := FALSE; init (goat) := FALSE;
@@ -15,16 +13,16 @@ ASSIGN
 	next (ferryman) := !ferryman;
 
     next (carry) := case
-                            ferryman = goat     : g;
-                            TRUE 	            : none; 
+                            ferryman = goat : g;
+                            TRUE : none; 
                       esac union 
                       case
-                            ferryman = cabbage  : c;
-                            TRUE 	            : none; 
+                            ferryman = cabbage : c;
+                            TRUE : none; 
                       esac union 
                       case
-                            ferryman = wolf     : w;
-                            TRUE 	            : none; 
+                            ferryman = wolf : w;
+                            TRUE : none; 
                       esac union none;
 
 	next (goat) := case
